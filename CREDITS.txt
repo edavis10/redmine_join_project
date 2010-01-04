@@ -1,0 +1,5 @@
+Thanks go to the following people for patches and contributions:
+
+* Eric Davis of Little Stream Software - Project Maintainer
+* Joseph Potvin of Treasury Board Secretariat, Government of Canada - Project requirements & initial funding
+* Paul Jackson of Treasury Board Secretariat, Government of Canada - Project requirements & initial funding
