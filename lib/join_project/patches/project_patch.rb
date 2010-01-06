@@ -5,17 +5,17 @@ module JoinProject
         base.send(:include, InstanceMethods)
         base.extend(ClassMethods)
         base.class_eval do
-          validates_inclusion_of :project_subscription, :in => subscription_options, :allow_nil => true, :allow_blank => 'true'
+          validates_inclusion_of :project_subscription, :in => join_options, :allow_nil => true, :allow_blank => 'true'
         end
       end
 
 
       module ClassMethods
-        def subscription_options
+        def join_options
           ['none','self-subscribe','request']
         end
 
-        def subscription_select_options
+        def join_options_for_select
           [
            [l(:label_none),'none'],
            [l(:join_project_text_self_subscribe), 'self-subscribe'],

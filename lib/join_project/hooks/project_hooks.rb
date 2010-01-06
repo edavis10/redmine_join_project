@@ -4,7 +4,7 @@ module JoinProject
       # :project
       # :form
       def view_projects_form(context={})
-        content = context[:form].select(:project_subscription, Project.subscription_select_options)
+        content = context[:form].select(:project_subscription, Project.join_options_for_select)
         return content_tag(:p, content)
       end
     end
