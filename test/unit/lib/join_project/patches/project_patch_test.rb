@@ -1,6 +1,5 @@
 require 'test_helper'
 
-#class JoinProject::Patches::ProjectPatchTest < ActiveSupport::TestCase
 class ProjectTest < ActiveSupport::TestCase
   should_allow_values_for :project_subscription, '', 'none', 'self-subscribe', 'request'
   should_not_allow_values_for :project_subscription, 'other', 'random text'
