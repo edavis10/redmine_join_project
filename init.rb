@@ -1,5 +1,11 @@
 require 'redmine'
 
+require 'dispatcher'
+Dispatcher.to_prepare :redmine_join_project do
+  require_dependency 'project'
+  Project.send(:include, JoinProject::Patches::ProjectPatch)
+end
+
 Redmine::Plugin.register :redmine_join_project do
   name 'Join Project'
   author 'Eric Davis'
