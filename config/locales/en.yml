@@ -1,3 +1,5 @@
 # English strings go here for Rails i18n
 en:
-  my_label: "My label"
+  field_project_subscription: Non-Members request to join
+  join_project_text_self_subscribe: Self subscribe
+  join_project_text_request_to_join: Request to join

@@ -1,5 +1,7 @@
 require 'redmine'
 
+require 'join_project/hooks/project_hooks'
+
 require 'dispatcher'
 Dispatcher.to_prepare :redmine_join_project do
   require_dependency 'project'
