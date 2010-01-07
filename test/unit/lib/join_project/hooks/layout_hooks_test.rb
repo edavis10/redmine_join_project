@@ -19,26 +19,38 @@ class JoinProject::Hooks::LayoutHooksTest < ActionController::TestCase
   context "#view_layouts_base_sidebar" do
     setup do
       @project = Project.generate!
+      @user = User.generate_with_protected!
+      User.current = @user
     end
 
     context "with a project" do
-      context "project doesn't allow joining" do
+      context "that doesn't allow joining" do
         should 'render nothing' do
           assert hook(:project => @project).blank?
         end
       end
 
-      context "project allow self subscribing" do
+      context "that allows self subscribing" do
         setup do
           @project.project_subscription = 'self-subscribe'
           @project.save!
         end
 
-        should "render the self subscribe partial" do
-          @controller.expects(:render_to_string).with(:partial => 'join_projects/self_subscribe_sidebar',
-                                                      :locals => {:project => @project}).returns('')
-          @response.body = hook(:project => @project)
+        context "for a non-member" do
+          should "render the self subscribe partial" do
+            @controller.expects(:render_to_string).with(:partial => 'join_projects/self_subscribe_sidebar',
+                                                        :locals => {:project => @project}).returns('')
+            @response.body = hook(:project => @project)
+          end
         end
+
+        context "for a member" do
+          should "render nothing" do
+            Member.generate!(:user_id => @user.id, :project => @project, :roles => [Role.generate!])
+            assert hook(:project => @project).blank?
+          end
+        end
+        
       end
     end
   end
