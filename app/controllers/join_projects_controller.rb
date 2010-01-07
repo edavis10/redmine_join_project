@@ -10,10 +10,10 @@ class JoinProjectsController < ApplicationController
     respond_to do |format|
       if @member.save
         flash[:notice] = l(:notice_successful_create)
-        format.html { redirect_to(:controller => 'projects', :action => 'show', :id => @project) }
+        format.html { redirect_back_or_default(:controller => 'projects', :action => 'show', :id => @project) }
       else
         flash[:error] = l(:join_project_error_cant_join)
-        format.html { redirect_to(:controller => 'projects', :action => 'show', :id => @project) }
+        format.html { redirect_back_or_default(:controller => 'projects', :action => 'show', :id => @project) }
       end
     end
   end
