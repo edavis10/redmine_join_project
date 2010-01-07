@@ -1,5 +1,6 @@
 require 'redmine'
 
+require 'join_project/hooks/layout_hooks'
 require 'join_project/hooks/project_hooks'
 
 require 'dispatcher'
@@ -19,5 +20,4 @@ Redmine::Plugin.register :redmine_join_project do
   requires_redmine :version_or_higher => '0.8.0'
 
   permission(:approve_project_join_requests, {})
-
 end

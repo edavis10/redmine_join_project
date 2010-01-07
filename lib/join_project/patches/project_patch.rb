@@ -32,6 +32,10 @@ module JoinProject
         def request_to_join?
           project_subscription == 'request'
         end
+
+        def joining_allowed?
+          ['request', 'self-subscribe'].include?(project_subscription)
+        end
       end
     end
   end
