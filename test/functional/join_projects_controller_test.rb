@@ -41,7 +41,21 @@ class JoinProjectsControllerTest < ActionController::TestCase
     end
 
     context "with no user joining allowed" do
-      should "be tested"
+      setup do
+        setup_plugin_configuration
+        @project = Project.generate!(:project_subscription => 'none')
+        @user = User.generate_with_protected!
+        @request.session[:user_id] = @user.id
+
+        assert !@user.member_of?(@project)
+        assert Project.all(:conditions => Project.visible_by(@user)).include?(@project)
+        
+        post :create, :project_id => @project.to_param
+      end
+
+      should_respond_with 404
+      should_render_template 'common/404'
+
     end
 
     context "with an invalid member" do
