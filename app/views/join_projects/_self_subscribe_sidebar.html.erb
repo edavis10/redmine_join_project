@@ -1,5 +1,5 @@
 <h3><%= l(:join_project_text_join_project) %></h3>
 
 <p>
-  <%= link_to(l(:join_project_text_join_this_project), {:controller => 'join_projects', :action => 'create', :id => project}, :method => :post) %>
+  <%= link_to(l(:join_project_text_join_this_project), join_projects_path(:project_id => project), :method => :post) %>
 </p>

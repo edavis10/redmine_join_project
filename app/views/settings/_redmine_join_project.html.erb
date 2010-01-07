@@ -1,0 +1,25 @@
+<fieldset>
+  <%= content_tag(:legend, l(:join_project_text_settings_configuration)) %>
+  <%= content_tag(:p, l(:join_project_settings_help)) %>
+
+  <p>
+    <%= content_tag(:label, l(:label_role_plural)) %>
+
+    <%-
+      roles = Role.all(:order => "position ASC")
+      selected = @settings['roles'].collect(&:to_i) unless @settings['roles'].blank?
+      selected ||= []
+    -%>
+
+    <% unless roles.empty? %>
+    <%=
+      select_tag("settings[roles]",
+                 content_tag(:option, '') + options_from_collection_for_select(roles, :id, :name, selected ),
+                 :multiple => true,
+                 :size => 5)
+    %>
+    <% else %>
+      <%= link_to(l(:join_project_missing_roles), :controller => 'roles', :action => 'index') %>
+   <% end %>
+  </p>
+</fieldset>

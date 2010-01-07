@@ -27,4 +27,15 @@ class ActiveSupport::TestCase
     @non_member_role = Role.generate!
     @non_member_role.update_attribute(:builtin, Role::BUILTIN_NON_MEMBER)
   end
+  
+  def configure_plugin(fields={})
+    Setting.plugin_redmine_join_project = fields.stringify_keys
+  end
+
+  def setup_plugin_configuration
+    @configured_roles = [Role.generate!, Role.generate!]
+    configure_plugin({
+                       'roles' => @configured_roles.collect(&:id).collect(&:to_s),
+                     })
+  end
 end
