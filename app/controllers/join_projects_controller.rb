@@ -12,6 +12,7 @@ class JoinProjectsController < ApplicationController
         flash[:notice] = l(:notice_successful_create)
         format.html { redirect_to(:controller => 'projects', :action => 'show', :id => @project) }
       else
+        flash[:error] = l(:join_project_error_cant_join)
         format.html { redirect_to(:controller => 'projects', :action => 'show', :id => @project) }
       end
     end

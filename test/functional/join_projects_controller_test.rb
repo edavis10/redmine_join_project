@@ -59,7 +59,28 @@ class JoinProjectsControllerTest < ActionController::TestCase
     end
 
     context "with an invalid member" do
-      should "be tested"
+      setup do
+        setup_plugin_configuration
+        @project = Project.generate!(:project_subscription => 'self-subscribe')
+        @user = User.generate_with_protected!
+        @request.session[:user_id] = @user.id
+
+        assert !@user.member_of?(@project)
+        assert Project.all(:conditions => Project.visible_by(@user)).include?(@project)
+
+        # Stub save to fail
+        Member.any_instance.stubs(:save).returns(false)
+        post :create, :project_id => @project.to_param
+      end
+
+      should_assign_to :member
+      should_redirect_to("the project overview") { "/projects/#{@project.to_param}" }
+      should_set_the_flash_to(/Unable to join/i)
+
+      should "not create a new Member for the current user on the project" do
+        @user.reload
+        assert !@user.member_of?(@project), "Membership created"
+      end
     end
   end
 
