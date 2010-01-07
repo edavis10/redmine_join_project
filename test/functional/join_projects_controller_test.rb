@@ -9,29 +9,43 @@ class JoinProjectsControllerTest < ActionController::TestCase
   should_have_before_filter :authorize
 
   context "on POST to :create on visible project" do
-    setup do
-      setup_plugin_configuration
-      @project = Project.generate!(:project_subscription => 'self-subscribe')
-      @user = User.generate_with_protected!
-      @request.session[:user_id] = @user.id
+    context "with self-subscribe" do
+      setup do
+        setup_plugin_configuration
+        @project = Project.generate!(:project_subscription => 'self-subscribe')
+        @user = User.generate_with_protected!
+        @request.session[:user_id] = @user.id
 
-      assert !@user.member_of?(@project)
-      assert Project.all(:conditions => Project.visible_by(@user)).include?(@project)
-      
-      post :create, :project_id => @project.to_param
+        assert !@user.member_of?(@project)
+        assert Project.all(:conditions => Project.visible_by(@user)).include?(@project)
+        
+        post :create, :project_id => @project.to_param
+      end
+
+      should_assign_to :member
+      should_redirect_to("the project overview") { "/projects/#{@project.to_param}" }
+      should_set_the_flash_to(/Successful creation/i)
+
+      should "create a new Member for the current user on the project" do
+        @user.reload
+        assert @user.member_of?(@project), "Membership not created"
+        
+        @configured_roles.each do |role|
+          assert @user.roles_for_project(@project).include?(role), "Missing the configured role of #{role}"
+        end
+      end
     end
 
-    should_assign_to :member
-    should_redirect_to("the project overview") { "/projects/#{@project.to_param}" }
-    should_set_the_flash_to(/Successful creation/i)
+    context "with request to join" do
+      should "be tested"
+    end
 
-    should "create a new Member for the current user on the project" do
-      @user.reload
-      assert @user.member_of?(@project), "Membership not created"
-      
-      @configured_roles.each do |role|
-        assert @user.roles_for_project(@project).include?(role), "Missing the configured role of #{role}"
-      end
+    context "with no user joining allowed" do
+      should "be tested"
+    end
+
+    context "with an invalid member" do
+      should "be tested"
     end
   end
 
