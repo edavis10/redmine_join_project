@@ -5,6 +5,7 @@ en:
   join_project_text_request_to_join: Request to join
   join_project_text_join_project: Join Project
   join_project_text_join_this_project: Join this project
+  join_project_text_request_to_join_this_project: Request to join
   join_project_text_settings_configuration: "Configuration"
   join_project_settings_help: "Select which Roles a new Member should receive when they are created."
   join_project_missing_roles: "Missing Roles.  Please create at least one first."

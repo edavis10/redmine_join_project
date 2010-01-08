@@ -1,0 +1,5 @@
+<h3><%= l(:join_project_text_join_project) %></h3>
+
+<p>
+  <%= link_to(l(:join_project_text_request_to_join_this_project), join_project_requests_path(:project_id => project, :back_url => url_for(params)), :method => :post) %>
+</p>
