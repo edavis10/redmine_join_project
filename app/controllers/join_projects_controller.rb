@@ -22,7 +22,7 @@ class JoinProjectsController < ApplicationController
   
   def find_project
     @project = Project.find(params[:project_id])
-    unless @project.joining_allowed?
+    unless @project.self_subscribe_allowed?
       render_404
     end
   rescue ActiveRecord::RecordNotFound
