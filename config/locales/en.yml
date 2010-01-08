@@ -10,3 +10,4 @@ en:
   join_project_settings_help: "Select which Roles a new Member should receive when they are created."
   join_project_missing_roles: "Missing Roles.  Please create at least one first."
   join_project_error_cant_join: "Unable to join the project."
+  join_project_successful_request: "Added your request to join. The project managers have been contacted."

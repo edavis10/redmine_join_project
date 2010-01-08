@@ -20,7 +20,10 @@ Redmine::Plugin.register :redmine_join_project do
   requires_redmine :version_or_higher => '0.8.0'
 
   permission(:approve_project_join_requests, {})
-  permission(:join_projects, {:join_projects => :create}, :public => true)
+  permission(:join_projects, {
+               :join_projects => :create,
+               :join_project_requests => :create
+             }, :public => true)
 
   settings({
              :partial => 'settings/redmine_join_project',
