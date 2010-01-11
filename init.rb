@@ -7,6 +7,10 @@ require 'dispatcher'
 Dispatcher.to_prepare :redmine_join_project do
   require_dependency 'project'
   Project.send(:include, JoinProject::Patches::ProjectPatch)
+
+  # Remove the load the observer so it's registered for each request.
+  ActiveRecord::Base.observers.delete(:project_join_request_observer)
+  ActiveRecord::Base.observers << :project_join_request_observer
 end
 
 Redmine::Plugin.register :redmine_join_project do
@@ -31,3 +35,5 @@ Redmine::Plugin.register :redmine_join_project do
                'roles' => []
              }})
 end
+
+

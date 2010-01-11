@@ -11,8 +11,15 @@ class JoinProjectRequestsControllerTest < ActionController::TestCase
   context "on POST to :create on visible project" do
     context "with request to join" do
       setup do
+        ActionMailer::Base.deliveries.clear
+
         setup_plugin_configuration
         @project = Project.generate!(:project_subscription => 'request')
+        @manager = User.generate_with_protected!(:mail => 'manager@example.com')
+        @manager.update_attributes(:mail_notification => true)
+        @manager_role = Role.generate!(:permissions => [:approve_project_join_requests])
+        Member.generate!(:user_id => @manager.id, :project => @project, :roles => [@manager_role])
+
         @user = User.generate_with_protected!
         @request.session[:user_id] = @user.id
 
@@ -26,7 +33,10 @@ class JoinProjectRequestsControllerTest < ActionController::TestCase
       should_redirect_to("the project overview") { "/projects/#{@project.to_param}" }
       should_set_the_flash_to(/contacted/i)
 
-      should "send an email to the project members who can approve the request"
+      should "send an email to the project members who can approve the request" do
+         assert_sent_email
+      end
+
       should "create a new request in the Join Queue" do
         request = ProjectJoinRequest.find_by_user_id_and_project_id(@user.id, @project.id)
         assert_kind_of ProjectJoinRequest, request
