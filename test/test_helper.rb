@@ -36,6 +36,7 @@ class ActiveSupport::TestCase
     @configured_roles = [Role.generate!, Role.generate!]
     configure_plugin({
                        'roles' => @configured_roles.collect(&:id).collect(&:to_s),
+                       'email_content' => 'A user would like to join your project. To approve or deny the request, use the link below:'
                      })
   end
 end

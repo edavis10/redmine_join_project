@@ -22,4 +22,9 @@
       <%= link_to(l(:join_project_missing_roles), :controller => 'roles', :action => 'index') %>
    <% end %>
   </p>
+
+  <p>
+    <%= content_tag(:label, l(:join_project_setting_email_content)) %>
+    <%= text_area_tag("settings[email_content]", @settings['email_content'], :rows => 5, :cols => 50) %>
+  </p>
 </fieldset>

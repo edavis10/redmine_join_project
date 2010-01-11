@@ -1,3 +1,6 @@
+<p>
+  <%= h(Setting.plugin_redmine_join_project['email_content']) -%>
+</p>
 
 <ul>
   <li><%= l(:field_user) %>: <%= h(@project_join_request.user) %> (<%= h(@project_join_request.user.login) %>)</li>

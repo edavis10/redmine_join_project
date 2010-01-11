@@ -32,7 +32,8 @@ Redmine::Plugin.register :redmine_join_project do
   settings({
              :partial => 'settings/redmine_join_project',
              :default => {
-               'roles' => []
+               'roles' => [],
+               'email_content' => 'A user would like to join your project. To approve or deny the request, use the link below:'
              }})
 end
 

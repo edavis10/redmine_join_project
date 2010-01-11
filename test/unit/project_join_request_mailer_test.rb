@@ -34,7 +34,11 @@ class ProjectJoinRequestMailerTest < ActiveSupport::TestCase
       end
     end
 
-    should "include the template email from the project settings"
+    should "include the template email from the project settings" do
+      assert_sent_email do |email|
+        email.body =~ /#{Setting.plugin_redmine_join_project['email_content']}/
+      end
+    end
 
     should "include the requesting user name" do
       assert_sent_email do |email|
