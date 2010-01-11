@@ -5,6 +5,7 @@ module JoinProject
         project = context[:project]
         return '' if project.nil?
         return '' if User.current.member_of?(project)
+        return '' if ProjectJoinRequest.pending_request_for?(User.current, project)
 
         case project.project_subscription
         when 'self-subscribe'

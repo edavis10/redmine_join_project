@@ -9,4 +9,8 @@ class ProjectJoinRequest < ActiveRecord::Base
   def self.create_request(user, project)
     ProjectJoinRequest.create(:user => user, :project => project, :status => 'new')
   end
+
+  def self.pending_request_for?(user, project)
+    ProjectJoinRequest.find_by_user_id_and_project_id(user.id, project.id)
+  end
 end

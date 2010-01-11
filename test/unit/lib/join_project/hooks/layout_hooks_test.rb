@@ -72,6 +72,13 @@ class JoinProject::Hooks::LayoutHooksTest < ActionController::TestCase
             assert hook(:project => @project).blank?
           end
         end
+
+        context "for a user who already has a request to join" do
+          should "render nothing" do
+            assert ProjectJoinRequest.create_request(@user, @project)
+            assert hook(:project => @project).blank?
+          end
+        end
       end
 
     end
