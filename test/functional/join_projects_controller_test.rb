@@ -36,10 +36,6 @@ class JoinProjectsControllerTest < ActionController::TestCase
       end
     end
 
-    context "with request to join" do
-      should "be tested"
-    end
-
     context "with no user joining allowed" do
       setup do
         setup_plugin_configuration
