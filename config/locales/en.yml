@@ -12,3 +12,5 @@ en:
   join_project_error_cant_join: "Unable to join the project."
   join_project_successful_request: "Added your request to join. The project managers have been contacted."
   join_project_setting_email_content: "Email body text"
+  join_project_text_accept_request: "Accept request"
+  join_project_text_decline_request: "Decline request"

@@ -1,4 +1,4 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :join_projects, :path_prefix => '/projects/:project_id', :only => [:create], :as => 'join'
-  map.resources :join_project_requests, :path_prefix => '/projects/:project_id', :only => [:create], :as => 'join_request'
+  map.resources :join_project_requests, :path_prefix => '/projects/:project_id', :only => [:create, :accept, :decline], :as => 'join_request', :member => {:accept => [:get, :put], :decline => [:get, :put]}
 end

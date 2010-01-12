@@ -3,6 +3,12 @@ require 'test_helper'
 class JoinProjectRequestsControllerTest < ActionController::TestCase
   context "routing" do
     should_route :post, "/projects/testingroutes/join_request", { :controller => 'join_project_requests', :action => :create, :project_id => 'testingroutes' }
+
+    should_route :get, "/projects/testingroutes/join_request/100/accept", { :controller => 'join_project_requests', :action => :accept, :project_id => 'testingroutes', :id => '100'}
+    should_route :put, "/projects/testingroutes/join_request/100/accept", { :controller => 'join_project_requests', :action => :accept, :project_id => 'testingroutes', :id => '100'}
+
+    should_route :get, "/projects/testingroutes/join_request/100/decline", { :controller => 'join_project_requests', :action => :decline, :project_id => 'testingroutes', :id => '100'}
+    should_route :put, "/projects/testingroutes/join_request/100/decline", { :controller => 'join_project_requests', :action => :decline, :project_id => 'testingroutes', :id => '100'}
   end
 
   should_have_before_filter :find_project

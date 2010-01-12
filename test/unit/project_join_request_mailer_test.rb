@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class ProjectJoinRequestMailerTest < ActiveSupport::TestCase
+  include ActionController::Assertions::SelectorAssertions
+
   context "#join_request" do
     setup do
       Setting.bcc_recipients = '1'
@@ -58,8 +60,18 @@ class ProjectJoinRequestMailerTest < ActiveSupport::TestCase
       end
     end
 
-    should "link to the accept url"
-    should "link to the deny url"
+    should "link to the accept url" do
+      assert_select_email do
+        assert_select "a[href=?]", "http://localhost:3000/projects/#{@project.to_param}/join_request/#{@project_join_request.id}/accept", :text => 'Accept request'
+      end
+    end
+
+    should "link to the deny url" do
+      assert_select_email do
+        assert_select "a[href=?]", "http://localhost:3000/projects/#{@project.to_param}/join_request/#{@project_join_request.id}/decline", :text => 'Decline request'
+      end
+    end
+
   end
 
 end

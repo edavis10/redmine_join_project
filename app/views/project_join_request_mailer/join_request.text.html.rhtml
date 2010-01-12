@@ -5,4 +5,6 @@
 <ul>
   <li><%= l(:field_user) %>: <%= h(@project_join_request.user) %> (<%= h(@project_join_request.user.login) %>)</li>
   <li><%= l(:field_project) %>: <%= h(@project_join_request.project) %></li>
+  <li><%= link_to(l(:join_project_text_accept_request), accept_join_project_request_url(:id => @project_join_request, :project_id => @project_join_request.project)) %></li>
+  <li><%= link_to(l(:join_project_text_decline_request), decline_join_project_request_url(:id => @project_join_request, :project_id => @project_join_request.project)) %></li>
 </ul>
