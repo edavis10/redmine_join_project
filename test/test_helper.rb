@@ -39,4 +39,14 @@ class ActiveSupport::TestCase
                        'email_content' => 'A user would like to join your project. To approve or deny the request, use the link below:'
                      })
   end
+
+  def setup_manager_for_project(project_attributes={})
+    @project = Project.generate!(project_attributes)
+    @manager = User.generate_with_protected!(:mail => 'manager@example.com')
+    @manager.update_attributes(:mail_notification => true)
+    @manager_role = Role.generate!(:permissions => [:approve_project_join_requests])
+    Member.generate!(:user_id => @manager.id, :project => @project, :roles => [@manager_role])
+
+    @manager
+  end
 end

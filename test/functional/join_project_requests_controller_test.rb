@@ -20,11 +20,7 @@ class JoinProjectRequestsControllerTest < ActionController::TestCase
         ActionMailer::Base.deliveries.clear
 
         setup_plugin_configuration
-        @project = Project.generate!(:project_subscription => 'request')
-        @manager = User.generate_with_protected!(:mail => 'manager@example.com')
-        @manager.update_attributes(:mail_notification => true)
-        @manager_role = Role.generate!(:permissions => [:approve_project_join_requests])
-        Member.generate!(:user_id => @manager.id, :project => @project, :roles => [@manager_role])
+        setup_manager_for_project(:project_subscription => 'request')
 
         @user = User.generate_with_protected!
         @request.session[:user_id] = @user.id
@@ -130,16 +126,9 @@ class JoinProjectRequestsControllerTest < ActionController::TestCase
 
   context "on GET to :accept on a visible project" do
     setup do
-      ActionMailer::Base.deliveries.clear
-
       setup_plugin_configuration
-      @project = Project.generate!(:project_subscription => 'request')
-      @manager = User.generate_with_protected!(:mail => 'manager@example.com')
-      @manager_role = Role.generate!(:permissions => [:approve_project_join_requests])
-      Member.generate!(:user_id => @manager.id, :project => @project, :roles => [@manager_role])
-
+      @request.session[:user_id] = setup_manager_for_project(:project_subscription => 'request').id
       @user = User.generate_with_protected!
-      @request.session[:user_id] = @manager.id
       @join_request = ProjectJoinRequest.create_request(@user, @project)
       
       assert !@user.member_of?(@project)
@@ -189,13 +178,8 @@ class JoinProjectRequestsControllerTest < ActionController::TestCase
   context "on GET to :accept on an authorized project to an unauthorized project request" do
     setup do
       setup_plugin_configuration
-      @project = Project.generate!(:project_subscription => 'request')
-      @manager = User.generate_with_protected!(:mail => 'manager@example.com')
-      @manager_role = Role.generate!(:permissions => [:approve_project_join_requests])
-      Member.generate!(:user_id => @manager.id, :project => @project, :roles => [@manager_role])
-
+      @request.session[:user_id] = setup_manager_for_project(:project_subscription => 'request')
       @user = User.generate_with_protected!
-      @request.session[:user_id] = @manager.id
       @join_request = ProjectJoinRequest.create_request(@user, Project.generate!(:project_subscription => 'request')) # Different project
       
       assert !@user.member_of?(@project)
