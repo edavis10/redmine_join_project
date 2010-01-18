@@ -18,6 +18,13 @@ class ProjectJoinRequest < ActiveRecord::Base
       :conditions => Project.allowed_to_condition(user, :approve_project_join_requests)
     }
   }
+
+  def accept!
+    membership = project.members.build
+    membership.user = user
+    membership.roles = Role.find(Setting.plugin_redmine_join_project['roles'])
+    membership.save && self.update_attribute(:status, 'accepted')
+  end
   
   def self.pending_requests_to_manage(user=User.current)
     status_of('new').visible_to(user)

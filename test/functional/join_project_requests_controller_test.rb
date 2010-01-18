@@ -127,4 +127,83 @@ class JoinProjectRequestsControllerTest < ActionController::TestCase
     should_respond_with 403
     should_render_template 'common/403'
   end
+
+  context "on GET to :accept on a visible project" do
+    setup do
+      ActionMailer::Base.deliveries.clear
+
+      setup_plugin_configuration
+      @project = Project.generate!(:project_subscription => 'request')
+      @manager = User.generate_with_protected!(:mail => 'manager@example.com')
+      @manager_role = Role.generate!(:permissions => [:approve_project_join_requests])
+      Member.generate!(:user_id => @manager.id, :project => @project, :roles => [@manager_role])
+
+      @user = User.generate_with_protected!
+      @request.session[:user_id] = @manager.id
+      @join_request = ProjectJoinRequest.create_request(@user, @project)
+      
+      assert !@user.member_of?(@project)
+        
+      get :accept, :project_id => @project.to_param, :id => @join_request.id
+
+    end
+    
+    should_assign_to :join_request
+    should_redirect_to("the project overview") { "/projects/#{@project.to_param}" }
+    should_set_the_flash_to(/Successful creation/i)
+
+    should "create a new Member for the current user on the project" do
+      @user.reload
+      assert @user.member_of?(@project), "Membership not created"
+        
+      @configured_roles.each do |role|
+        assert @user.roles_for_project(@project).include?(role), "Missing the configured role of #{role}"
+      end
+    end
+
+    should "update the join request to be 'accepted'" do
+      @join_request.reload
+
+      assert_equal 'accepted', @join_request.status
+    end
+
+  end
+
+  context "on GET to :accept on an unauthorized project" do
+    setup do
+      setup_plugin_configuration
+      @project = Project.generate!(:project_subscription => 'request', :is_public => false)
+      @user = User.generate_with_protected!
+      @request.session[:user_id] = @user.id
+
+      assert !@user.member_of?(@project)
+      assert !Project.all(:conditions => Project.visible_by(@user)).include?(@project)
+      
+      get :accept, :project_id => @project.to_param
+    end
+  
+    should_respond_with 403
+    should_render_template 'common/403'
+  end
+
+  context "on GET to :accept on an authorized project to an unauthorized project request" do
+    setup do
+      setup_plugin_configuration
+      @project = Project.generate!(:project_subscription => 'request')
+      @manager = User.generate_with_protected!(:mail => 'manager@example.com')
+      @manager_role = Role.generate!(:permissions => [:approve_project_join_requests])
+      Member.generate!(:user_id => @manager.id, :project => @project, :roles => [@manager_role])
+
+      @user = User.generate_with_protected!
+      @request.session[:user_id] = @manager.id
+      @join_request = ProjectJoinRequest.create_request(@user, Project.generate!(:project_subscription => 'request')) # Different project
+      
+      assert !@user.member_of?(@project)
+      
+      get :accept, :project_id => @project.to_param, :id => @join_request.id
+    end
+  
+    should_respond_with 403
+    should_render_template 'common/403'
+  end
 end
