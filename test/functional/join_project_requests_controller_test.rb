@@ -208,8 +208,6 @@ class JoinProjectRequestsControllerTest < ActionController::TestCase
     should_redirect_to("the project overview") { "/projects/#{@project.to_param}" }
     should_set_the_flash_to(/declined/i)
 
-    should "send the requester an email"
-
     should "update the join request to be 'declined'" do
       @join_request.reload
 

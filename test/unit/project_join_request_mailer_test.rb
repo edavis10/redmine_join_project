@@ -74,4 +74,42 @@ class ProjectJoinRequestMailerTest < ActiveSupport::TestCase
 
   end
 
+  context "#declined_request" do
+    setup do
+      Setting.bcc_recipients = '1'
+
+      @project = Project.generate!(:project_subscription => 'request')
+      @user = User.generate_with_protected!
+      @project_join_request = ProjectJoinRequest.create_request(@user, @project)
+      @project_join_request.update_attribute(:status, 'declined')
+      ActionMailer::Base.deliveries.clear
+      
+      ProjectJoinRequestMailer.deliver_declined_request(@project_join_request)
+    end
+
+    should "be sent the requesting user" do
+      assert_sent_email do |email|
+        assert email.bcc
+        email.bcc.include?(@user.mail)
+      end
+    end
+    
+    should "have a subject" do
+      assert_sent_email do |email|
+        email.subject =~ /declined/i
+      end
+    end
+    
+    should "include the project name" do
+      assert_sent_email do |email|
+        email.body =~ /#{@project.name}/
+      end
+    end
+    
+    should "include a notice that the user's request was declined" do
+      assert_sent_email do |email|
+        email.body =~ /your request to join #{@project.name} was declined/i
+      end
+    end
+  end
 end

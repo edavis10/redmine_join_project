@@ -46,4 +46,16 @@ class ProjectJoinRequestTest < ActiveSupport::TestCase
       assert !ProjectJoinRequest.pending_requests_to_manage.include?(@other_join_request)
     end
   end
+
+  context "#decline!" do
+    should "send an email to the requester" do
+      @join_request = ProjectJoinRequest.generate!(:user => User.generate_with_protected!,
+                                                   :project => Project.generate!)
+      ActionMailer::Base.deliveries.clear
+
+      @join_request.decline!
+    
+      assert_sent_email
+    end
+  end
 end

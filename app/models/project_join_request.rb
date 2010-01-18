@@ -28,6 +28,8 @@ class ProjectJoinRequest < ActiveRecord::Base
 
   def decline!
     self.update_attribute(:status, 'declined')
+    ProjectJoinRequestMailer.deliver_declined_request(self)
+    self
   end
   
   def self.pending_requests_to_manage(user=User.current)
