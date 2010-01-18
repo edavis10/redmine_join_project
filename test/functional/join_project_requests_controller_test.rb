@@ -190,4 +190,64 @@ class JoinProjectRequestsControllerTest < ActionController::TestCase
     should_respond_with 403
     should_render_template 'common/403'
   end
+
+  context "on GET to :decline on a visible project" do
+    setup do
+      setup_plugin_configuration
+      @request.session[:user_id] = setup_manager_for_project(:project_subscription => 'request').id
+      @user = User.generate_with_protected!
+      @join_request = ProjectJoinRequest.create_request(@user, @project)
+      
+      assert !@user.member_of?(@project)
+        
+      get :decline, :project_id => @project.to_param, :id => @join_request.id
+
+    end
+    
+    should_assign_to :join_request
+    should_redirect_to("the project overview") { "/projects/#{@project.to_param}" }
+    should_set_the_flash_to(/declined/i)
+
+    should "send the requester an email"
+
+    should "update the join request to be 'declined'" do
+      @join_request.reload
+
+      assert_equal 'declined', @join_request.status
+    end
+
+  end
+
+  context "on GET to :decline on an unauthorized project" do
+    setup do
+      setup_plugin_configuration
+      @project = Project.generate!(:project_subscription => 'request', :is_public => false)
+      @user = User.generate_with_protected!
+      @request.session[:user_id] = @user.id
+
+      assert !@user.member_of?(@project)
+      assert !Project.all(:conditions => Project.visible_by(@user)).include?(@project)
+      
+      get :decline, :project_id => @project.to_param
+    end
+  
+    should_respond_with 403
+    should_render_template 'common/403'
+  end
+
+  context "on GET to :decline on an authorized project to an unauthorized project request" do
+    setup do
+      setup_plugin_configuration
+      @request.session[:user_id] = setup_manager_for_project(:project_subscription => 'request')
+      @user = User.generate_with_protected!
+      @join_request = ProjectJoinRequest.create_request(@user, Project.generate!(:project_subscription => 'request')) # Different project
+      
+      assert !@user.member_of?(@project)
+      
+      get :decline, :project_id => @project.to_param, :id => @join_request.id
+    end
+  
+    should_respond_with 403
+    should_render_template 'common/403'
+  end
 end

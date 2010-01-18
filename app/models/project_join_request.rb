@@ -25,6 +25,10 @@ class ProjectJoinRequest < ActiveRecord::Base
     membership.roles = Role.find(Setting.plugin_redmine_join_project['roles'])
     membership.save && self.update_attribute(:status, 'accepted')
   end
+
+  def decline!
+    self.update_attribute(:status, 'declined')
+  end
   
   def self.pending_requests_to_manage(user=User.current)
     status_of('new').visible_to(user)

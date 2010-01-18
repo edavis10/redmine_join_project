@@ -30,6 +30,20 @@ class JoinProjectRequestsController < ApplicationController
     end
   end
 
+  def decline
+    @join_request = ProjectJoinRequest.find(params[:id])
+    
+    respond_to do |format|
+      if @join_request.decline!
+        flash[:notice] = l(:join_project_successful_decline)
+        format.html {redirect_back_or_default(:controller => 'projects', :action => 'show', :id => @project) }
+      else
+        flash[:error] = l(:join_project_error_cant_join)
+        format.html {redirect_back_or_default(:controller => 'projects', :action => 'show', :id => @project) }
+      end
+    end
+  end
+
   private
 
   def find_project
