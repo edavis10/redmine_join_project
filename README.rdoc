@@ -4,11 +4,15 @@ A Redmine plugin to allow non-members to join a project in Redmine
 
 == Features
 
-* __FEATURE__
+* Allow non-members to join a project themselves:
+  * Can add themselves directly to a self-subscribe project
+  * Can send a Request to Join to other projects
+* Email notifications of requests to join
+* A simple Approval workflow to allow manager to approve or deny requests
 
 == Getting the plugin
 
-A copy of the plugin can be downloaded from {Little Stream Software}[https://projects.littlestreamsoftware.com/projects/___XXX___/files] or from {GitHub}[http://github.com/edavis10/___XXX___]
+A copy of the plugin can be downloaded from {Little Stream Software}[https://projects.littlestreamsoftware.com/projects/redmine-join/files] or from {GitHub}[http://github.com/edavis10/redmine_join_project]
 
 
 == Installation and Setup
@@ -16,11 +20,27 @@ A copy of the plugin can be downloaded from {Little Stream Software}[https://pro
 1. Follow the Redmine plugin installation steps at: http://www.redmine.org/wiki/redmine/Plugins 
 2. Run the plugin migrations +rake db:migrate_plugins+
 3. Restart your Redmine web servers (e.g. mongrel, thin, mod_rails)
-4. __XXX__
+4. Login to Redmine as an Administrator
+5. Configure the permissions for the plugin: 'Approve Project Join Requests'
+5. Configure the plugin (below)
+6. Setup any projects that allow non-members to join
+
+== Plugin configuration
+
+There are two things that need to be configured on the plugin before it can be used.  The configuration panel is located at Administration > Plugins > Configure.
+
+* Roles: When a new member is added to a project, they will receive these Roles.  At least one Role needs to be picked.
+* Email body text: When a Request To Join email is sent to the Project Members who have permission to Approve Project Join Requests. The email's body includes details about the request as well as the body text entered here.
 
 == Usage
 
-__XXX__
+=== Joining a project
+
+If the project allows joining, Non-members will see a link on the sidebar to Join.  This will either add them to the project (self-subscribe) or send a Request to Join (request).
+
+=== Approving / Denying a Request To Join
+
+A My Page item is added which will list all of the pending Requests to Join.  From the My Page, a user can see which requests they are allowed to Approve or Deny along with links to both actions.
 
 == License
 
