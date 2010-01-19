@@ -2,12 +2,16 @@ require 'redmine'
 
 require 'join_project/hooks/layout_hooks'
 require 'join_project/hooks/project_hooks'
+require 'join_project/hooks/my_hooks'
 
 require 'dispatcher'
 Dispatcher.to_prepare :redmine_join_project do
   require_dependency 'project'
+  require_dependency 'user_preference'
+  
   Project.send(:include, JoinProject::Patches::ProjectPatch)
-
+  UserPreference.send(:include, JoinProject::Patches::UserPreferencePatch)
+  
   # Remove the load the observer so it's registered for each request.
   ActiveRecord::Base.observers.delete(:project_join_request_observer)
   ActiveRecord::Base.observers << :project_join_request_observer
