@@ -10,10 +10,15 @@ class ProjectJoinRequestMailerTest < ActiveSupport::TestCase
       @project = Project.generate!(:project_subscription => 'request')
       @manager = User.generate_with_protected!(:mail => 'manager@example.com')
       @manager.update_attributes(:mail_notification => true)
+      @blocking_manager = User.generate_with_protected!(:mail => 'manager2@example.com')
+      @blocking_manager.pref[:block_join_project_requests] = '1'
+      @blocking_manager.pref.save
+      @blocking_manager.update_attributes(:mail_notification => true)
       @another_member = User.generate_with_protected!(:mail => 'member@example.com')
       @another_member.update_attributes(:mail_notification => true)
       @manager_role = Role.generate!(:permissions => [:approve_project_join_requests])
       Member.generate!(:user_id => @manager.id, :project => @project, :roles => [@manager_role])
+      Member.generate!(:user_id => @blocking_manager.id, :project => @project, :roles => [@manager_role])
       Member.generate!(:user_id => @another_member.id, :project => @project, :roles => [Role.generate!])
       
       @user = User.generate_with_protected!
@@ -23,10 +28,17 @@ class ProjectJoinRequestMailerTest < ActiveSupport::TestCase
       ProjectJoinRequestMailer.deliver_join_request(@project_join_request)
     end
 
-    should "be to the project members who can approve the request" do
+    should "be sent to the project members who can approve the request" do
       assert_sent_email do |email|
         assert email.bcc, "No members included in the BCC"
         email.bcc.include?(@manager.mail)
+      end
+    end
+
+    should "not include managers who are blocking project join requests" do
+      assert_sent_email do |email|
+        assert email.bcc, "No members included in the BCC"
+        !email.bcc.include?(@blocking_manager.mail)
       end
     end
 
