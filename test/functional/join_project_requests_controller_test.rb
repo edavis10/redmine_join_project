@@ -93,7 +93,7 @@ class JoinProjectRequestsControllerTest < ActionController::TestCase
         assert Project.all(:conditions => Project.visible_by(@user)).include?(@project)
 
         # Stub save to fail
-        ProjectJoinRequest.stubs(:create).returns(false)
+        ProjectJoinRequest.stubs(:create).returns(ProjectJoinRequest.new)
         post :create, :project_id => @project.to_param
       end
 

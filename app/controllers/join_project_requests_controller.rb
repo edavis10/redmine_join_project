@@ -6,7 +6,7 @@ class JoinProjectRequestsController < ApplicationController
   def create
     @join_request = ProjectJoinRequest.create_request(User.current, @project)
     respond_to do |format|
-      if @join_request
+      unless @join_request.new_record?
         flash[:notice] = l(:join_project_successful_request)
         format.html { redirect_back_or_default(:controller => 'projects', :action => 'show', :id => @project) }
       else
