@@ -2,6 +2,8 @@ require 'test_helper'
 
 class JoinProjectRequestsControllerTest < ActionController::TestCase
   context "routing" do
+    should_route :get, "/join_project_requests", { :controller => 'join_project_requests', :action => :index}
+    
     should_route :post, "/projects/testingroutes/join_request", { :controller => 'join_project_requests', :action => :create, :project_id => 'testingroutes' }
 
     should_route :get, "/projects/testingroutes/join_request/100/accept", { :controller => 'join_project_requests', :action => :accept, :project_id => 'testingroutes', :id => '100'}
@@ -11,8 +13,40 @@ class JoinProjectRequestsControllerTest < ActionController::TestCase
     should_route :put, "/projects/testingroutes/join_request/100/decline", { :controller => 'join_project_requests', :action => :decline, :project_id => 'testingroutes', :id => '100'}
   end
 
-  should_have_before_filter :find_project
-  should_have_before_filter :authorize
+  should_have_before_filter :find_project, :except => [:index]
+  should_have_before_filter :authorize, :except => [:index]
+  should_have_before_filter :authorize_global, :only => [:index]
+  
+  context "on GET to :index for a user with visible Project Join Requests" do
+    setup do
+      setup_plugin_configuration
+      @request.session[:user_id] = setup_manager_for_project(:project_subscription => 'request')
+
+      @user1 = User.generate_with_protected!
+      @user2 = User.generate_with_protected!
+      @join_request1 = ProjectJoinRequest.create_request(@user1, @project)
+      @join_request2 = ProjectJoinRequest.create_request(@user2, @project)
+
+      @back_url = CGI.escape(join_project_requests_path)
+
+      get :index
+    end
+    
+    should_assign_to :join_requests
+    should_respond_with :success
+    should_render_template :index
+    should_not_set_the_flash
+
+    should "show links to accept the requests" do
+      assert_select "a[href=?]", "/projects/#{@project.to_param}/join_request/#{@join_request1.id}/accept?back_url=#{@back_url}", :text => 'Accept request'
+      assert_select "a[href=?]", "/projects/#{@project.to_param}/join_request/#{@join_request2.id}/accept?back_url=#{@back_url}", :text => 'Accept request'
+    end
+
+    should "show links to decline the requests" do
+      assert_select "a[href=?]", "/projects/#{@project.to_param}/join_request/#{@join_request1.id}/decline?back_url=#{@back_url}", :text => 'Decline request'
+      assert_select "a[href=?]", "/projects/#{@project.to_param}/join_request/#{@join_request2.id}/decline?back_url=#{@back_url}", :text => 'Decline request'
+    end
+  end
 
   context "on POST to :create on visible project" do
     context "with request to join" do

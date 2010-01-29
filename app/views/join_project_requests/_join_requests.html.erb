@@ -1,0 +1,29 @@
+<% if join_requests.count > 0 %>
+<table class="list">
+  <thead>
+    <tr>
+      <th><%= l(:field_user) %></th>
+      <th><%= l(:field_project) %></th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% join_requests.each do |project_join_request| %>
+    <tr>
+      <%= content_tag(:td, link_to_user(project_join_request.user)) %>
+      <%= content_tag(:td, link_to(h(project_join_request.project), :controller => 'projects', :action => 'show', :id => project_join_request.project)) %>
+      <td>
+        <%= link_to(l(:join_project_text_accept_request), accept_join_project_request_path(:id => project_join_request, :project_id => project_join_request.project, :back_url => url_for(params))) %> 
+      </td>
+      <td>
+        <%= link_to(l(:join_project_text_decline_request), decline_join_project_request_path(:id => project_join_request, :project_id => project_join_request.project, :back_url => url_for(params))) %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<% else %>
+<%= content_tag(:p, l(:label_no_data)) %>
+<% end %>

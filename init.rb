@@ -28,7 +28,7 @@ Redmine::Plugin.register :redmine_join_project do
   requires_redmine :version_or_higher => '0.8.0'
 
   permission(:approve_project_join_requests, {
-               :join_project_requests => [:accept, :decline]
+               :join_project_requests => [:index, :accept, :decline]
              })
   permission(:join_projects, {
                :join_projects => :create,
@@ -41,6 +41,16 @@ Redmine::Plugin.register :redmine_join_project do
                'roles' => [],
                'email_content' => 'A user would like to join your project. To approve or deny the request, use the link below:'
              }})
+
+  # TODO: Need the unless for the test env, it's reloading oddly
+  menu(:top_menu,
+       :project_join_requests,
+       {:controller => 'join_project_requests', :action => 'index'},
+       :caption => :join_project_text_project_join_requests,
+       :if => Proc.new {
+         User.current.allowed_to?(:approve_project_join_requests, nil, :global => true)
+       }) unless Redmine::MenuManager.map(:top_menu).exists?(:project_join_requests)
+
 end
 
 
