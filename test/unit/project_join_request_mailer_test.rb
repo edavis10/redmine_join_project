@@ -17,9 +17,9 @@ class ProjectJoinRequestMailerTest < ActiveSupport::TestCase
       @another_member = User.generate_with_protected!(:mail => 'member@example.com')
       @another_member.update_attributes(:mail_notification => true)
       @manager_role = Role.generate!(:permissions => [:approve_project_join_requests])
-      Member.generate!(:user_id => @manager.id, :project => @project, :roles => [@manager_role])
-      Member.generate!(:user_id => @blocking_manager.id, :project => @project, :roles => [@manager_role])
-      Member.generate!(:user_id => @another_member.id, :project => @project, :roles => [Role.generate!])
+      Member.generate!(:principal => @manager, :project => @project, :roles => [@manager_role])
+      Member.generate!(:principal => @blocking_manager, :project => @project, :roles => [@manager_role])
+      Member.generate!(:principal => @another_member, :project => @project, :roles => [Role.generate!])
       
       @user = User.generate_with_protected!
       @project_join_request = ProjectJoinRequest.create_request(@user, @project)

@@ -12,7 +12,7 @@ class RequestToJoinTest < ActionController::IntegrationTest
     @manager = User.generate_with_protected!(:login => 'manager', :mail => 'manager@example.com', :password => @password, :password_confirmation => @password)
     @manager.update_attributes(:mail_notification => true)
     @manager_role = Role.generate!(:permissions => [:approve_project_join_requests])
-    Member.generate!(:user_id => @manager.id, :project => @project, :roles => [@manager_role])
+    Member.generate!(:principal => @manager, :project => @project, :roles => [@manager_role])
     
     # Login
     @user = User.generate_with_protected!(:password => @password, :password_confirmation => @password)

@@ -9,8 +9,12 @@ class ProjectJoinRequestTest < ActiveSupport::TestCase
 
   context "#after_save callback" do
     should "send an email to the project members who can approve the request" do
+      project = Project.generate!
+      manager = User.generate_with_protected!
+      manager_role = Role.generate!(:permissions => [:approve_project_join_requests])
+      Member.generate!(:principal => manager, :project => project, :roles => [manager_role], :mail_notification => true)
       ProjectJoinRequest.generate!(:user => User.generate_with_protected!,
-                                   :project => Project.generate!)
+                                   :project => project)
       
       assert_sent_email
     end
@@ -21,7 +25,7 @@ class ProjectJoinRequestTest < ActiveSupport::TestCase
       @project = Project.generate!(:project_subscription => 'request')
       @manager = User.generate_with_protected!
       @manager_role = Role.generate!(:permissions => [:approve_project_join_requests])
-      Member.generate!(:user_id => @manager.id, :project => @project, :roles => [@manager_role])
+      Member.generate!(:principal => @manager, :project => @project, :roles => [@manager_role])
 
       # New requests
       @new1 = ProjectJoinRequest.generate!(:project => @project, :user => User.generate_with_protected!, :status => 'new')

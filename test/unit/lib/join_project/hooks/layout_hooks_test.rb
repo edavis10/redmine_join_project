@@ -46,7 +46,7 @@ class JoinProject::Hooks::LayoutHooksTest < ActionController::TestCase
 
         context "for a member" do
           should "render nothing" do
-            Member.generate!(:user_id => @user.id, :project => @project, :roles => [Role.generate!])
+            Member.generate!(:principal => @user, :project => @project, :roles => [Role.generate!])
             assert hook(:project => @project).blank?
           end
         end
@@ -68,7 +68,7 @@ class JoinProject::Hooks::LayoutHooksTest < ActionController::TestCase
 
         context "for a member" do
           should "render nothing" do
-            Member.generate!(:user_id => @user.id, :project => @project, :roles => [Role.generate!])
+            Member.generate!(:principal => @user, :project => @project, :roles => [Role.generate!])
             assert hook(:project => @project).blank?
           end
         end

@@ -45,7 +45,7 @@ class ActiveSupport::TestCase
     @manager = User.generate_with_protected!(:mail => 'manager@example.com')
     @manager.update_attributes(:mail_notification => true)
     @manager_role = Role.generate!(:permissions => [:approve_project_join_requests])
-    Member.generate!(:user_id => @manager.id, :project => @project, :roles => [@manager_role])
+    Member.generate!(:principal => @manager, :project => @project, :roles => [@manager_role])
 
     @manager
   end
