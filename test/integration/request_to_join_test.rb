@@ -28,7 +28,7 @@ class RequestToJoinTest < ActionController::IntegrationTest
 
     # Redirected back to previous page
     assert_equal current_url, url_for(:controller => 'projects', :action => 'activity', :id => @project.identifier)
-    assert_select 'div.flash.notice', /The project managers have been contacted/
+    assert_select 'div.flash.notice', /The project managers have been notified/
 
     # Request added
     assert_kind_of ProjectJoinRequest, ProjectJoinRequest.find_by_user_id_and_project_id(@user.id, @project.id)
