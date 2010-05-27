@@ -1,21 +1,21 @@
-# English strings go here for Rails i18n
+# French strings go here for Rails i18n
 fr:
-  field_project_subscription: Non-Members request to join
-  join_project_text_self_subscribe: Self subscribe
-  join_project_text_request_to_join: Request to join
-  join_project_text_join_project: Join Project
-  join_project_text_join_this_project: Join this project
-  join_project_text_request_to_join_this_project: Request to join
-  join_project_text_declined_request_to_join_this_project: Declined request to join
+  field_project_subscription: "Non-membres demandent adhésion"
+  join_project_text_self_subscribe: "S'inscrire eux-mêmes"
+  join_project_text_request_to_join: "Demandent adhésion"
+  join_project_text_join_project: "Joignez-vous au projet"
+  join_project_text_join_this_project: "Joignez-vous au projet"
+  join_project_text_request_to_join_this_project: "Demande d'adhésion"
+  join_project_text_declined_request_to_join_this_project: "Demande d'adhésion refusée"
   join_project_text_settings_configuration: "Configuration"
-  join_project_settings_help: "Select which Roles a new Member should receive when they are created and the body text for Project Join Request emails."
-  join_project_missing_roles: "Missing Roles.  Please create at least one first."
-  join_project_error_cant_join: "Unable to join the project."
-  join_project_successful_request: "Added your request to join. The project managers have been contacted."
-  join_project_successful_decline: "Declined join request"
-  join_project_setting_email_content: "Email body text"
-  join_project_text_accept_request: "Accept request"
-  join_project_text_decline_request: "Decline request"
-  join_project_text_project_join_requests: "Project Join Requests"
-  join_project_text_your_request_to_join_was_declined: "Your request to join {{project}} was declined."
-  field_block_join_project_requests: "Block join project email requests"
+  join_project_settings_help: "Sélectionnez les rôle que chaque nouveau membre devrait recevoir par défaut."
+  join_project_missing_roles: "Manque de rôle. S'il vous plaît créer au moins un."
+  join_project_error_cant_join: "Impossible de rejoindre le projet."
+  join_project_successful_request: "Votre demande d'adhésion est ajoutée. Les responsables du projet ont été informés."
+  join_project_successful_decline: "Demande d'adhésion refusée"
+  join_project_setting_email_content: "Texte du courriel"
+  join_project_text_accept_request: "Accepter la demande"
+  join_project_text_decline_request: "Refuser la demande"
+  join_project_text_project_join_requests: "Les demandes d'adhésion aux projets"
+  join_project_text_your_request_to_join_was_declined: "Votre demande d'adhésion au projet {{project}} a été refusé."
+  field_block_join_project_requests: "Arrêter les courriels de demandes d'adhésion"

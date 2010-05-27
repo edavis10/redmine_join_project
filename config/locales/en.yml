@@ -8,10 +8,10 @@ en:
   join_project_text_request_to_join_this_project: Request to join
   join_project_text_declined_request_to_join_this_project: Declined request to join
   join_project_text_settings_configuration: "Configuration"
-  join_project_settings_help: "Select which Roles a new Member should receive when they are created and the body text for Project Join Request emails."
-  join_project_missing_roles: "Missing Roles.  Please create at least one first."
+  join_project_settings_help: "Select which roles each new project member should receive by default"
+  join_project_missing_roles: "Missing Role.  Please create at least one first."
   join_project_error_cant_join: "Unable to join the project."
-  join_project_successful_request: "Added your request to join. The project managers have been contacted."
+  join_project_successful_request: "Your request to join is added. The project managers have been notified."
   join_project_successful_decline: "Declined join request"
   join_project_setting_email_content: "Email body text"
   join_project_text_accept_request: "Accept request"
