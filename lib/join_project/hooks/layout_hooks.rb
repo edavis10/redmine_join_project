@@ -4,6 +4,7 @@ module JoinProject
       def view_layouts_base_sidebar(context={})
         project = context[:project]
         return '' if project.nil?
+        return '' unless User.current.logged?
         return '' if User.current.member_of?(project)
         return '' if ProjectJoinRequest.pending_request_for?(User.current, project)
 

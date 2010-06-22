@@ -50,6 +50,13 @@ class JoinProject::Hooks::LayoutHooksTest < ActionController::TestCase
             assert hook(:project => @project).blank?
           end
         end
+
+        context "for an anonymous user" do
+          should "render nothing" do
+            User.current = nil
+            assert hook(:project => @project).blank?
+          end
+        end
       end
 
       context "that allows request to join" do
@@ -79,6 +86,14 @@ class JoinProject::Hooks::LayoutHooksTest < ActionController::TestCase
             assert hook(:project => @project).blank?
           end
         end
+
+        context "for an anonymous user" do
+          should "render nothing" do
+            User.current = nil
+            assert hook(:project => @project).blank?
+          end
+        end
+
       end
 
     end
