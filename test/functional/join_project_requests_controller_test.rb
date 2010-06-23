@@ -138,6 +138,19 @@ class JoinProjectRequestsControllerTest < ActionController::TestCase
         assert_nil ProjectJoinRequest.find_by_user_id_and_project_id(@user.id, @project.id)
       end
     end
+
+    context "with no logged in user" do
+      setup do
+        setup_plugin_configuration
+        @request.session[:user_id] = nil
+        @project = Project.generate!(:project_subscription => 'none', :is_public => true)
+        
+        post :create, :project_id => @project.to_param
+      end
+
+      should_respond_with :redirect
+      should_redirect_to("login") { {:controller => 'account', :action => 'login'} }
+    end
   end
 
   context "on POST to :create on an unauthorized project" do

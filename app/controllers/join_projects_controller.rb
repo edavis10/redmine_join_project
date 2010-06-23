@@ -1,5 +1,6 @@
 class JoinProjectsController < ApplicationController
   unloadable
+  before_filter :require_login
   before_filter :find_project
   before_filter :authorize
   

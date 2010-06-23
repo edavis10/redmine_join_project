@@ -78,6 +78,19 @@ class JoinProjectsControllerTest < ActionController::TestCase
         assert !@user.member_of?(@project), "Membership created"
       end
     end
+
+    context "with no logged in user" do
+      setup do
+        setup_plugin_configuration
+        @project = Project.generate!(:project_subscription => 'self-subscribe')
+        
+        post :create, :project_id => @project.to_param
+      end
+
+      should_respond_with :redirect
+      should_redirect_to("login") { {:controller => 'account', :action => 'login'} }
+    end
+
   end
 
   context "on POST to :create on an unauthorized project" do

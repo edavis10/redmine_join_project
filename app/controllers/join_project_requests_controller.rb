@@ -1,5 +1,6 @@
 class JoinProjectRequestsController < ApplicationController
   unloadable
+  before_filter :require_login
   before_filter :find_project, :except => [:index]
   before_filter :authorize, :except => [:index]
   before_filter :authorize_global, :only => [:index]
