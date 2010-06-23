@@ -66,7 +66,7 @@ class JoinProjectRequestsControllerTest < ActionController::TestCase
 
       should_assign_to :join_request
       should_redirect_to("the project overview") { "/projects/#{@project.to_param}" }
-      should_set_the_flash_to(/contacted/i)
+      should_set_the_flash_to(/notified/i)
 
       should "send an email to the project members who can approve the request" do
          assert_sent_email
