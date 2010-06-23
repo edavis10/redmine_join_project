@@ -27,8 +27,7 @@ class JoinProjectRequestsControllerTest < ActionController::TestCase
       @join_request1 = ProjectJoinRequest.create_request(@user1, @project)
       @join_request2 = ProjectJoinRequest.create_request(@user2, @project)
 
-      @back_url = CGI.escape(join_project_requests_path)
-
+      @back_url = CGI.escape("/join_project_requests")
       get :index
     end
     
