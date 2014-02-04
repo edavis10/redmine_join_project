@@ -6,6 +6,7 @@ module JoinProject
         base.extend(ClassMethods)
         base.class_eval do
           validates_inclusion_of :project_subscription, :in => join_options, :allow_nil => true, :allow_blank => 'true'
+          safe_attributes :project_subscription
         end
       end
 
